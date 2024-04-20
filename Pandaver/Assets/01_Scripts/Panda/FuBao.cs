@@ -9,7 +9,7 @@ public class FuBao : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.D))
 		{
-			MoveFuBao(3);
+			MoveFuBao(8);
 		}
 	}
 
