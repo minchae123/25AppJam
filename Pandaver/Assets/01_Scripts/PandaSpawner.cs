@@ -20,20 +20,18 @@ public class PandaSpawner : MonoBehaviour
 
 	public int curLevel = 0;
 
-	private FuBao fubao;
+	[SerializeField] private FuBao fubao;
+
+	public GameObject correctInfo;
 
 	private void Start()
 	{
 		timeManager = GetComponent<TimeManager>();
-		fubao = FindObjectOfType<FuBao>();
-	}
+        //fubao = FindObjectOfType<FuBao>();
+    }
 
-	void Update()
+    void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			Spawn();
-		}
 		if (RealPandas.Count == 0)
 		{
 			isClickTime = true;
@@ -67,12 +65,7 @@ public class PandaSpawner : MonoBehaviour
 				point.Add(randomIndex);
 				GameObject obj = Instantiate(PandasPrefab, SpawnPositionList[randomIndex]);
 
-
 				RealPandas.Add(obj);
-			}
-			else
-			{
-				print("두개는나오지마셈");
 			}
 
 		}
@@ -95,22 +88,33 @@ public class PandaSpawner : MonoBehaviour
 		if (EveryCheck())
 		{
 			GameClear();
-			timeManager.time = 0;
-			Spawn();
 		}
 	}
 
 	public void GameClear()
 	{
 		print("성공");
+		StartCoroutine(GameInfoCoroutine());
 		LevelUp();
 		fubao.MoveFuBao(curLevel);
 	}
 
+	IEnumerator GameInfoCoroutine()
+	{
+		correctInfo.SetActive(true);
+		yield return new WaitForSeconds(0.4f);
+		correctInfo.SetActive(false);
+        timeManager.time = 0;
+        Spawn();
+    }
+
 	public void Fail()
 	{
 		print("떙");
-	}
+		GameManager.Instance.ReduceHP();
+        timeManager.time = 0;
+        Spawn();
+    }
 
 	public bool EveryCheck()
 	{

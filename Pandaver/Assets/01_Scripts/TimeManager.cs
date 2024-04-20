@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.Rendering;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -13,19 +14,27 @@ public class TimeManager : MonoBehaviour
 		spawner = GetComponent<PandaSpawner>();
 	}
 
-	private void Update()
+    private void Start()
+    {
+
+    }
+
+    private void Update()
 	{
-		if (spawner.isClickTime)
+		if (GameManager.Instance.isStart)
 		{
-			time += Time.deltaTime;
-		}
-		else
-			time = 0;
-		if (time > time2)
-		{
-			print("強強強");
-			spawner.Spawn();
-			time = 0;
+			if (spawner.isClickTime)
+			{
+				time += Time.deltaTime;
+			}
+			else
+				time = 0;
+			if (time > time2)
+			{
+				//print("強強強");
+				spawner.Spawn();
+				time = 0;
+			}
 		}
 	}
 

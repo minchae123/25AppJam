@@ -7,14 +7,36 @@ using DG.Tweening;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject overPanel;
+    [SerializeField] private GameObject TopPanel;
+    [SerializeField] private GameObject startPanel;
+    [SerializeField] private Animator animator;
 
-	private void Update()
+    public static UIManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Update()
 	{
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             GameOver();
         }
+
+        if (Input.anyKey)
+        {
+            StartPanel();
+        }
 	}
+
+    public void StartPanel()
+    {
+        TopPanel.SetActive(true);
+        animator.SetTrigger("start");
+        GameManager.Instance.GameStart();
+    }
 
 	public void GameOver()
     {
