@@ -7,6 +7,8 @@ public class Box : MonoBehaviour
     public bool isClick = false;
     private PandaSpawner spawner;
 
+    private Material mat;
+
     private void Awake()
     {
         spawner = FindObjectOfType<PandaSpawner>();
