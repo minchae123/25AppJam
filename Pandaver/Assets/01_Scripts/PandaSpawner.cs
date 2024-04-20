@@ -27,10 +27,10 @@ public class PandaSpawner : MonoBehaviour
 	private void Start()
 	{
 		timeManager = GetComponent<TimeManager>();
-        //fubao = FindObjectOfType<FuBao>();
-    }
+		//fubao = FindObjectOfType<FuBao>();
+	}
 
-    void Update()
+	void Update()
 	{
 		if (RealPandas.Count == 0)
 		{
@@ -78,16 +78,19 @@ public class PandaSpawner : MonoBehaviour
 
 	public void Check(int remove)
 	{
-		if (point.Contains(remove))
-			point.Remove(remove);
-		else
+		if (RealPandas.Count == 0)
 		{
-			Fail();
-		}
+			if (point.Contains(remove))
+				point.Remove(remove);
+			else
+			{
+				Fail();
+			}
 
-		if (EveryCheck())
-		{
-			GameClear();
+			if (EveryCheck())
+			{
+				GameClear();
+			}
 		}
 	}
 
@@ -104,17 +107,17 @@ public class PandaSpawner : MonoBehaviour
 		correctInfo.SetActive(true);
 		yield return new WaitForSeconds(0.4f);
 		correctInfo.SetActive(false);
-        timeManager.time = 0;
-        Spawn();
-    }
+		timeManager.time = 0;
+		Spawn();
+	}
 
 	public void Fail()
 	{
 		print("‹¯");
 		GameManager.Instance.ReduceHP();
-        timeManager.time = 0;
-        Spawn();
-    }
+		timeManager.time = 0;
+		Spawn();
+	}
 
 	public bool EveryCheck()
 	{
