@@ -5,46 +5,49 @@ using UnityEngine;
 
 public class PandaSpawner : MonoBehaviour
 {
-    public List<Transform> SpawnPositionList = new List<Transform>();
-    public List<GameObject> RealPandas = new List<GameObject>();
+	TimeManager timeManager;
 
-    private List<int> point = new List<int>();
+	public List<Transform> SpawnPositionList = new List<Transform>();
+	public List<GameObject> RealPandas = new List<GameObject>();
 
-    public GameObject PandasPrefab;
+	private List<int> point = new List<int>();
 
-    public bool isClickTime = false;
+	public GameObject PandasPrefab;
 
-    [SerializeField] private int maxCount;
+	public bool isClickTime = false;
 
-    public int curLevel = 0;
+	[SerializeField] private int maxCount;
 
-    private FuBao fubao;
+	public int curLevel = 0;
 
-    private void Start()
-    {
-        fubao = FindObjectOfType<FuBao>();
-    }
+	private FuBao fubao;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Spawn();
-        }
-        if (RealPandas.Count == 0)
-        {
-            isClickTime = true;
-        }
-    }
+	private void Start()
+	{
+		timeManager = GetComponent<TimeManager>();
+		fubao = FindObjectOfType<FuBao>();
+	}
 
-    public void Spawn()
-    {
-        point = new List<int>();
-        RealPandas = new List<GameObject>();
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			Spawn();
+		}
+		if (RealPandas.Count == 0)
+		{
+			isClickTime = true;
+		}
+	}
 
-        isClickTime = false;
+	public void Spawn()
+	{
+		point = new List<int>();
+		RealPandas = new List<GameObject>();
 
-        /*maxCount = curLevel switch
+		isClickTime = false;
+
+		/*maxCount = curLevel switch
         {
             < 2 => 2,
             >= 2 and < 5 => 5,
@@ -54,64 +57,66 @@ public class PandaSpawner : MonoBehaviour
             _ => 16
         };*/
 
-        int randomCount = Random.Range(1, maxCount);
+		int randomCount = Random.Range(1, maxCount);
 
-        for (int i = 0; i < curLevel; i++)
-        {
-            int randomIndex = Random.Range(0, SpawnPositionList.Count);
-            if (SpawnPositionList[randomIndex].childCount == 0)
-            {
-                point.Add(randomIndex);
-                GameObject obj = Instantiate(PandasPrefab, SpawnPositionList[randomIndex]);
+		for (int i = 0; i < curLevel; i++)
+		{
+			int randomIndex = Random.Range(0, SpawnPositionList.Count);
+			if (SpawnPositionList[randomIndex].childCount == 0)
+			{
+				point.Add(randomIndex);
+				GameObject obj = Instantiate(PandasPrefab, SpawnPositionList[randomIndex]);
 
 
-                RealPandas.Add(obj);
-            }
-            else
-            {
-                print("두개는나오지마셈");
-            }
+				RealPandas.Add(obj);
+			}
+			else
+			{
+				print("두개는나오지마셈");
+			}
 
-        }
-    }
+		}
+	}
 
-    public void LevelUp()
-    {
-        curLevel++;
-    }
+	public void LevelUp()
+	{
+		curLevel++;
+	}
 
-    public void Check(int remove)
-    {
-        if (point.Contains(remove))
-            point.Remove(remove);
-        else
-        {
-            Fail();
-        }
+	public void Check(int remove)
+	{
+		if (point.Contains(remove))
+			point.Remove(remove);
+		else
+		{
+			Fail();
+		}
 
-        if(EveryCheck())
-        {
-            GameClear();
-        }
-    }
+		if (EveryCheck())
+		{
+			GameClear();
+			timeManager.time = 0;
+			Spawn();
+		}
+	}
 
-    public void GameClear()
-    {
-        print("성공");
-        LevelUp();
-        fubao.MoveFuBao(curLevel);
-    }
+	public void GameClear()
+	{
+		print("성공");
+		LevelUp();
+		fubao.MoveFuBao(curLevel);
+	}
 
-    public void Fail()
-    {
-        print("떙");
-    }
+	public void Fail()
+	{
+		print("떙");
+	}
 
-    public bool EveryCheck()
-    {
-        if (point.Count == 0)
-            return true;
-        else
-            return false;
-    }
+	public bool EveryCheck()
+	{
+		if (point.Count == 0)
+			return true;
+		else
+			return false;
+	}
 }
