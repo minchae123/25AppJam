@@ -12,12 +12,17 @@ public class PandaSpawner : MonoBehaviour
 
     public GameObject PandasPrefab;
 
-    Dictionary<bool, bool> dic = new Dictionary<bool, bool>();
-    //public List<int> PandasList = new List<int>();
+    public bool isClickTime = false;
 
-    void Start()
+    [SerializeField] private int maxCount;
+
+    public int curLevel = 0;
+
+    private FuBao fubao;
+
+    private void Start()
     {
-
+        fubao = FindObjectOfType<FuBao>();
     }
 
     void Update()
@@ -26,16 +31,32 @@ public class PandaSpawner : MonoBehaviour
         {
             Spawn();
         }
+        if (RealPandas.Count == 0)
+        {
+            isClickTime = true;
+        }
     }
 
-    void Spawn()
+    public void Spawn()
     {
         point = new List<int>();
         RealPandas = new List<GameObject>();
 
-        int randomCount = Random.Range(0, 10);
+        isClickTime = false;
 
-        for (int i = 0; i < randomCount; i++)
+        /*maxCount = curLevel switch
+        {
+            < 2 => 2,
+            >= 2 and < 5 => 5,
+            >= 5 and <= 8 => 7,
+            >= 9 and < 13 => 9,
+            >= 13 and < 17 => 12,
+            _ => 16
+        };*/
+
+        int randomCount = Random.Range(1, maxCount);
+
+        for (int i = 0; i < curLevel; i++)
         {
             int randomIndex = Random.Range(0, SpawnPositionList.Count);
             if (SpawnPositionList[randomIndex].childCount == 0)
@@ -54,13 +75,36 @@ public class PandaSpawner : MonoBehaviour
         }
     }
 
+    public void LevelUp()
+    {
+        curLevel++;
+    }
+
     public void Check(int remove)
     {
-        print(remove);
         if (point.Contains(remove))
             point.Remove(remove);
+        else
+        {
+            Fail();
+        }
 
-        print(EveryCheck());
+        if(EveryCheck())
+        {
+            GameClear();
+        }
+    }
+
+    public void GameClear()
+    {
+        print("¼º°ø");
+        LevelUp();
+        fubao.MoveFuBao(curLevel);
+    }
+
+    public void Fail()
+    {
+        print("‹¯");
     }
 
     public bool EveryCheck()

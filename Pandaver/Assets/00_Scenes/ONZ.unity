@@ -409,7 +409,7 @@ GameObject:
   m_Component:
   - component: {fileID: 209368929}
   - component: {fileID: 209368928}
-  - component: {fileID: 209368930}
+  - component: {fileID: 209368931}
   m_Layer: 0
   m_Name: PandaSpanwer
   m_TagString: Untagged
@@ -452,6 +452,10 @@ MonoBehaviour:
   - {fileID: 1677275270}
   RealPandas: []
   PandasPrefab: {fileID: 5342580992093983881, guid: a5f690e3025f35744a8760fcf510cac3, type: 3}
+  isClickTime: 0
+  minCount: 1
+  maxCount: 16
+  curLevel: 0
 --- !u!4 &209368929
 Transform:
   m_ObjectHideFlags: 0
@@ -487,7 +491,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &209368930
+--- !u!114 &209368931
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -496,9 +500,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 209368927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 399f741d9ae34284fbf4664540f18cf5, type: 3}
+  m_Script: {fileID: 11500000, guid: 36672b20c9133da4eb92d1eb7daef9d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  time: 0
 --- !u!1 &259797984
 GameObject:
   m_ObjectHideFlags: 0
