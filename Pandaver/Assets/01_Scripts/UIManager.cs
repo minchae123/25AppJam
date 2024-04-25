@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject overPanel;
     [SerializeField] private GameObject TopPanel;
     [SerializeField] private GameObject startPanel;
+    [SerializeField] private GameObject clearPanel;
     [SerializeField] private Animator animator;
 
     public static UIManager Instance;
@@ -36,6 +37,11 @@ public class UIManager : MonoBehaviour
         TopPanel.SetActive(true);
         animator.SetTrigger("start");
         GameManager.Instance.GameStart();
+    }
+
+    public void GameClear()
+    {
+        clearPanel.transform.DOLocalMoveY(0, 1);
     }
 
 	public void GameOver()
