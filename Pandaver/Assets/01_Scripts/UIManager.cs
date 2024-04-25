@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour
     public void GameClear()
     {
         clearPanel.transform.DOLocalMoveY(0, 1);
+        print("유아이매니저에서게임클리어를하였다");
     }
 
 	public void GameOver()

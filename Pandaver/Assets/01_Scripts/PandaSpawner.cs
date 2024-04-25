@@ -6,50 +6,54 @@ using UnityEngine.Experimental.Rendering.RenderGraphModule;
 
 public class PandaSpawner : MonoBehaviour
 {
-	TimeManager timeManager;
+    TimeManager timeManager;
 
-	public List<Transform> SpawnPositionList = new List<Transform>();
-	public List<Renderer> renderers;
-	public List<GameObject> RealPandas = new List<GameObject>();
+    public List<Transform> SpawnPositionList = new List<Transform>();
+    public List<Renderer> renderers;
+    public List<GameObject> RealPandas = new List<GameObject>();
 
-	private List<int> point = new List<int>();
+    private List<int> point = new List<int>();
 
-	public GameObject PandasPrefab;
+    public GameObject PandasPrefab;
 
-	public bool isClickTime = false;
+    public bool isClickTime = false;
 
-	public bool isCheck = false;
+    public bool isCheck = false;
 
-	[SerializeField] private int maxCount;
+    [SerializeField] private int maxCount;
 
-	public int curLevel = 0;
+    public int curLevel = 0;
 
-	[SerializeField] private FuBao fubao;
+    [SerializeField] private FuBao fubao;
 
-	public GameObject correctInfo;
+    public GameObject correctInfo;
 
-	private void Start()
-	{
-		timeManager = GetComponent<TimeManager>();
-		//fubao = FindObjectOfType<FuBao>();
-	}
+    private void Start()
+    {
+        timeManager = GetComponent<TimeManager>();
+        //fubao = FindObjectOfType<FuBao>();
+    }
 
-	void Update()
-	{
-		if (RealPandas.Count == 0)
-		{
-			isClickTime = true;
-		}
-	}
+    void Update()
+    {
+        if (RealPandas.Count == 0)
+        {
+            isClickTime = true;
+        }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            LevelUp();
+        }
+    }
 
-	public void Spawn()
-	{
-		point = new List<int>();
-		RealPandas = new List<GameObject>();
+    public void Spawn()
+    {
+        point = new List<int>();
+        RealPandas = new List<GameObject>();
 
-		isClickTime = false;
+        isClickTime = false;
 
-		/*maxCount = curLevel switch
+        /*maxCount = curLevel switch
         {
             < 2 => 2,
             >= 2 and < 5 => 5,
@@ -59,36 +63,36 @@ public class PandaSpawner : MonoBehaviour
             _ => 16
         };*/
 
-		int randomCount = Random.Range(1, maxCount);
+        int randomCount = Random.Range(1, maxCount);
 
-		for (int i = 0; i < curLevel; i++)
-		{
-			int randomIndex = Random.Range(0, SpawnPositionList.Count);
-			if (SpawnPositionList[randomIndex].childCount == 1)
-			{
-				point.Add(randomIndex);
-				GameObject obj = Instantiate(PandasPrefab, SpawnPositionList[randomIndex]);
+        for (int i = 0; i < curLevel; i++)
+        {
+            int randomIndex = Random.Range(0, SpawnPositionList.Count);
+            if (SpawnPositionList[randomIndex].childCount == 1)
+            {
+                point.Add(randomIndex);
+                GameObject obj = Instantiate(PandasPrefab, SpawnPositionList[randomIndex]);
 
-				RealPandas.Add(obj);
-			}
+                RealPandas.Add(obj);
+            }
 
-		}
-	}
+        }
+    }
 
-	public void LevelUp()
-	{
-		curLevel++;
-	}
+    public void LevelUp()
+    {
+        curLevel++;
+    }
 
 
-	IEnumerator RenderRed()
-	{
-		foreach(var o in renderers)
-		{
-			o.material.color = Color.red;
-		}
+    IEnumerator RenderRed()
+    {
+        foreach (var o in renderers)
+        {
+            o.material.color = Color.red;
+        }
 
-		yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.3f);
 
         foreach (var o in renderers)
         {
@@ -112,46 +116,46 @@ public class PandaSpawner : MonoBehaviour
     }
 
     public void Check(int remove)
-	{
-		isCheck = false;
-		if (RealPandas.Count == 0)
-		{
-			if (point.Contains(remove))
-			{
-				point.Remove(remove);
-				isCheck = true;
-			}
-			else
-			{
-				Fail();
-				isCheck = false;
-			}
+    {
+        isCheck = false;
+        if (RealPandas.Count == 0)
+        {
+            if (point.Contains(remove))
+            {
+                point.Remove(remove);
+                isCheck = true;
+            }
+            else
+            {
+                Fail();
+                isCheck = false;
+            }
 
-			if (EveryCheck())
-			{
-				GameClear();
-			}
-		}
-	}
+            if (EveryCheck())
+            {
+                GameClear();
+            }
+        }
+    }
 
-	public void GameClear()
-	{
-		print("성공");
-		RenderChange();
-		StartCoroutine(GameInfoCoroutine());
-		StartCoroutine(RenderGreen());
-		LevelUp();
-		fubao.MoveFuBao(curLevel);
-	}
+    public void GameClear()
+    {
+        print("성공");
+        RenderChange();
+        StartCoroutine(GameInfoCoroutine());
+        StartCoroutine(RenderGreen());
+        LevelUp();
+        fubao.MoveFuBao(curLevel);
+    }
 
-	IEnumerator GameInfoCoroutine()
-	{
-		correctInfo.SetActive(true);
-		yield return new WaitForSeconds(0.4f);
-		correctInfo.SetActive(false);
-		timeManager.time = 0;
-		Spawn();
-	}
+    IEnumerator GameInfoCoroutine()
+    {
+        correctInfo.SetActive(true);
+        yield return new WaitForSeconds(0.4f);
+        correctInfo.SetActive(false);
+        timeManager.time = 0;
+        Spawn();
+    }
 
     public void RenderChange()
     {
@@ -162,19 +166,19 @@ public class PandaSpawner : MonoBehaviour
     }
 
     public void Fail()
-	{
-		print("떙");
-		StartCoroutine(RenderRed());
-		GameManager.Instance.ReduceHP();
-		timeManager.time = 0;
-		Spawn();
-	}
+    {
+        print("떙");
+        StartCoroutine(RenderRed());
+        GameManager.Instance.ReduceHP();
+        timeManager.time = 0;
+        Spawn();
+    }
 
-	public bool EveryCheck()
-	{
-		if (point.Count == 0)
-			return true;
-		else
-			return false;
-	}
+    public bool EveryCheck()
+    {
+        if (point.Count == 0)
+            return true;
+        else
+            return false;
+    }
 }
